@@ -5,6 +5,8 @@ namespace auth0login
 {
     public class LoginSettings
     {
+        public bool Signup { get; set; }
+
         public Uri RedirectUri { get; set; }
         public Uri Authority { get; set; }
         public string Audience { get; set; }

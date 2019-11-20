@@ -90,6 +90,31 @@ namespace auth0login
             var query = QueryHelpers.ParseQuery(response.RequestMessage.RequestUri.Query);
             var state = query["state"].ToString();
 
+            if (loginSettings.Signup)
+            {
+                var signupPage = loginSettings.Authority.GetLeftPart(System.UriPartial.Authority) + "/dbconnections/signup";
+
+                _log("  - Login Step 1.5: signup: " + signupPage);
+
+                var signupRequest = new HttpRequestMessage(HttpMethod.Post, signupPage)
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(new
+                    {
+                        client_id = clientId,
+                        connection = loginSettings.Connection,
+                        email = loginSettings.UserName,
+                        password = loginSettings.Password,
+                    }), Encoding.UTF8, "application/json")
+                };
+
+                response = await httpClient.SendAsync(signupRequest);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new InvalidOperationException($"Invalid response code in Step 1.5. StatusCode: {response.StatusCode} login page: {signupPage}. {await response.Content.ReadAsStringAsync()}");
+                }
+
+            }
+
 
             // The spec doesn't say where to post the login details to
             // but it's at /usernamepassword/login
@@ -172,6 +197,8 @@ namespace auth0login
 
             return tokenResponse;
         }
+
+
 
     }
 }

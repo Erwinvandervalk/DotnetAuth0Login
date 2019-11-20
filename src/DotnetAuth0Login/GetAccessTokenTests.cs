@@ -50,8 +50,6 @@ namespace auth0login
                 Password = "<<password goes here>>"
             });
 
-            _output.WriteLine(token.AccessToken);
-
             Assert.NotEmpty(token.AccessToken);
 
         }
