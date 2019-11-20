@@ -1,17 +1,25 @@
-# DotnetAuth0Login
+using System;
+using System.Threading.Tasks;
+using Xunit;
+using Xunit.Abstractions;
 
-This repo demonstrates how you can log in to auth0 using username + password using Authorization Code flow.
+namespace auth0login
+{
+    public class GetAccessTokenTests
+    {
+        private readonly ITestOutputHelper _output;
 
-As part of our automated smoke tests, we want to be able to simulate a user logging in. This code does that. 
+        private LoginFixture _fixture;
 
-It took me a while to figure out how to do this, so in this repo i'm capturing my learnings. 
+        public GetAccessTokenTests(ITestOutputHelper output)
+        {
+            _output = output;
+            _fixture = new LoginFixture(output.WriteLine);
+        }
 
-## Usage:
-
-This code requests a token. 
-
-``` c#
-
+        [Fact]
+        public async Task Get_access_token()
+        {
             var token = await _fixture.Login(new LoginSettings()
             {
                 Authority = new Uri("<<url to your auth0 tenant>>"),
@@ -42,10 +50,10 @@ This code requests a token.
                 Password = "<<password goes here>>"
             });
 
-```
+            _output.WriteLine(token.AccessToken);
 
-## Open Questions
+            Assert.NotEmpty(token.AccessToken);
 
-I still need to pass client secret value to exchange authorization code, though I have no idea why.
-
-
+        }
+    }
+}
