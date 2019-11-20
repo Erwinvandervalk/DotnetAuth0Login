@@ -65,7 +65,7 @@ namespace auth0login
             var cryptoHelper = new CryptoHelper();
             var pkce = cryptoHelper.CreatePkceData();
             var clientId = loginSettings.ClientId;
-            
+
             var authorizeUrl = request.CreateAuthorizeUrl(
                 clientId,
                 OidcConstants.ResponseTypes.Code,
@@ -156,15 +156,14 @@ namespace auth0login
             var tokenResponse = await httpClient.RequestAuthorizationCodeTokenAsync(new AuthorizationCodeTokenRequest
             {
                 Address = disco.TokenEndpoint,
-
                 ClientId = clientId,
-                ClientCredentialStyle = ClientCredentialStyle.AuthorizationHeader,
-                ClientSecret = loginSettings.ClientSecret,
+                ClientCredentialStyle = ClientCredentialStyle.PostBody,
                 Code = code,
                 RedirectUri = loginSettings.RedirectUri.ToString(),
                 CodeVerifier = pkce.CodeVerifier,
                 Parameters = new Dictionary<string, string>()
             });
+            
             if (tokenResponse.HttpStatusCode != HttpStatusCode.OK)
             {
                 throw new InvalidOperationException($"Failed step 5. statuscode not ok: {tokenResponse.HttpStatusCode} {tokenResponse.ErrorDescription} {tokenResponse.Error}");
