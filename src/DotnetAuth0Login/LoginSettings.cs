@@ -16,7 +16,6 @@ namespace auth0login
         public string UserName { get; set; }
         public string Password { get; set; }
         public string ClientId { get; set; }
-        public string ClientSecret { get; set; }
         public string Auth0Tenant { get; set; }
         public string Connection { get; set; }
     }
