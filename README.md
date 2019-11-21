@@ -25,9 +25,6 @@ This code requests a token.
 
                 ClientId = "<client id here>>",
 
-                // Haven't been able to get it to work without a client secret
-                ClientSecret = "<<client secret here>>",
-
                 // The redirecturi that you have configured for your application
                 // Note, this URL does not have to be valid, as long as it's registered with auth0,
                 // as requests to it will get intercepted
@@ -43,9 +40,5 @@ This code requests a token.
             });
 
 ```
-
-## Open Questions
-
-I still need to pass client secret value to exchange authorization code, though I have no idea why.
 
 
